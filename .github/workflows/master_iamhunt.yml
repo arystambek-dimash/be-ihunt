@@ -21,10 +21,53 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Install dependencies and start server
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set environment variables
         run: |
-          npm install
-          npm run server
+          echo "PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
+          echo "MONGO_DB_URI=${{ secrets.MONGO_DB_URI }}" >> $GITHUB_ENV
+          echo "MONGO_DATABASE=${{ secrets.MONGO_DATABASE }}" >> $GITHUB_ENV
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> $GITHUB_ENV
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
+          echo "HH_CLIENT_ID=${{ secrets.HH_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "HH_CLIENT_SECRET=${{ secrets.HH_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "LINKEDIN_CLIENT_ID=${{ secrets.LINKEDIN_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "LINKEDIN_CLIENT_SECRET=${{ secrets.LINKEDIN_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "JOOBLE_REST_API=${{ secrets.JOOBLE_REST_API }}" >> $GITHUB_ENV
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
+          echo "GEMINI_AI_API_KEY=${{ secrets.GEMINI_AI_API_KEY }}" >> $GITHUB_ENV
+          echo "GOOGLE_MAIL_APP_EMAIL=${{ secrets.GOOGLE_MAIL_APP_EMAIL }}" >> $GITHUB_ENV
+          echo "GOOGLE_MAIL_APP_PASSWORD=${{ secrets.GOOGLE_MAIL_APP_PASSWORD }}" >> $GITHUB_ENV
+          echo "CLIENT_SIDE_URL=${{ secrets.CLIENT_SIDE_URL }}" >> $GITHUB_ENV
+          echo "SERVER_SIDE_URL=${{ secrets.SERVER_SIDE_URL }}" >> $GITHUB_ENV
+
+      - name: Start server
+        run: npm run server
+        env:
+          PORT: ${{ secrets.PORT }}
+          MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
+          MONGO_DATABASE: ${{ secrets.MONGO_DATABASE }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          HH_CLIENT_ID: ${{ secrets.HH_CLIENT_ID }}
+          HH_CLIENT_SECRET: ${{ secrets.HH_CLIENT_SECRET }}
+          LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
+          LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
+          JOOBLE_REST_API: ${{ secrets.JOOBLE_REST_API }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_AI_API_KEY: ${{ secrets.GEMINI_AI_API_KEY }}
+          GOOGLE_MAIL_APP_EMAIL: ${{ secrets.GOOGLE_MAIL_APP_EMAIL }}
+          GOOGLE_MAIL_APP_PASSWORD: ${{ secrets.GOOGLE_MAIL_APP_PASSWORD }}
+          CLIENT_SIDE_URL: ${{ secrets.CLIENT_SIDE_URL }}
+          SERVER_SIDE_URL: ${{ secrets.SERVER_SIDE_URL }}
 
       - name: Login to Azure
         uses: azure/login@v2
