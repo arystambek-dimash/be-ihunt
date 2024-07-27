@@ -11,22 +11,26 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Azure Container Registry
+        uses: azure/docker-login@v1
         with:
-          node-version: '20.x'
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build the project
-        run: npm run build
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/ihunt:${{ github.sha }} .
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/ihunt:${{ github.sha }}
 
       - name: Set environment variables
         run: |
@@ -55,11 +59,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'ihunt'
-          slot-name: 'Production'
+      - name: Deploy to Azure Web App for Containers
+        run: |
+          az webapp config container set --resource-group iamhunt --name ihunt --docker-custom-image-name ${{ secrets.ACR_LOGIN_SERVER }}/ihunt:${{ github.sha }} --docker-registry-server-url https://${{ secrets.ACR_LOGIN_SERVER }} --docker-registry-server-user ${{ secrets.ACR_USERNAME }} --docker-registry-server-password ${{ secrets.ACR_PASSWORD }}
 
       - name: Configure App Settings on Azure Web App
         run: |
