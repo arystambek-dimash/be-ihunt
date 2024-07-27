@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy Node.js app to Azure Web App - iamhunt
 
 on:
@@ -6,17 +9,12 @@ on:
       - master
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Node.js version
         uses: actions/setup-node@v3
@@ -51,12 +49,10 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
-          auth-type: 'secret'
-          client-secret: ${{ secrets.AZUREAPPSERVICE_PASSWORD }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
@@ -64,33 +60,29 @@ jobs:
           app-name: 'iamhunt'
           slot-name: 'Production'
 
-      - name: Configure startup command in Azure Web App
+      - name: Start server on Azure
         run: |
-          az webapp config set --name iamhunt --resource-group iamhunt --startup-file "npm run server"
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings WEBSITES_PORT=${{ secrets.PORT }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings MONGO_DB_URI=${{ secrets.MONGO_DB_URI }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings MONGO_DATABASE=${{ secrets.MONGO_DATABASE }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings AWS_REGION=${{ secrets.AWS_REGION }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings HH_CLIENT_ID=${{ secrets.HH_CLIENT_ID }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings HH_CLIENT_SECRET=${{ secrets.HH_CLIENT_SECRET }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings LINKEDIN_CLIENT_ID=${{ secrets.LINKEDIN_CLIENT_ID }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings LINKEDIN_CLIENT_SECRET=${{ secrets.LINKEDIN_CLIENT_SECRET }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings JOOBLE_REST_API=${{ secrets.JOOBLE_REST_API }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings GEMINI_AI_API_KEY=${{ secrets.GEMINI_AI_API_KEY }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings GOOGLE_MAIL_APP_EMAIL=${{ secrets.GOOGLE_MAIL_APP_EMAIL }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings GOOGLE_MAIL_APP_PASSWORD=${{ secrets.GOOGLE_MAIL_APP_PASSWORD }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings CLIENT_SIDE_URL=${{ secrets.CLIENT_SIDE_URL }}
+          az webapp config appsettings set --resource-group iamhunt --name iamhunt --settings SERVER_SIDE_URL=${{ secrets.SERVER_SIDE_URL }}
         env:
-          AZUREAPPSERVICE_CLIENTID: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          AZUREAPPSERVICE_TENANTID: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          AZUREAPPSERVICE_SUBSCRIPTIONID: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
-          AZUREAPPSERVICE_PASSWORD: ${{ secrets.AZUREAPPSERVICE_PASSWORD }}
-
-      - name: Debug environment variables
-        run: |
-          echo "PORT=$PORT"
-          echo "MONGO_DB_URI=$MONGO_DB_URI"
-          echo "MONGO_DATABASE=$MONGO_DATABASE"
-          echo "JWT_SECRET_KEY=$JWT_SECRET_KEY"
-          echo "AWS_SECRET_KEY=$AWS_SECRET_KEY"
-          echo "AWS_ACCESS_KEY=$AWS_ACCESS_KEY"
-          echo "AWS_BUCKET_NAME=$AWS_BUCKET_NAME"
-          echo "AWS_REGION=$AWS_REGION"
-          echo "HH_CLIENT_ID=$HH_CLIENT_ID"
-          echo "HH_CLIENT_SECRET=$HH_CLIENT_SECRET"
-          echo "LINKEDIN_CLIENT_ID=$LINKEDIN_CLIENT_ID"
-          echo "LINKEDIN_CLIENT_SECRET=$LINKEDIN_CLIENT_SECRET"
-          echo "JOOBLE_REST_API=$JOOBLE_REST_API"
-          echo "OPENAI_API_KEY=$OPENAI_API_KEY"
-          echo "GEMINI_AI_API_KEY=$GEMINI_AI_API_KEY"
-          echo "GOOGLE_MAIL_APP_EMAIL=$GOOGLE_MAIL_APP_EMAIL"
-          echo "GOOGLE_MAIL_APP_PASSWORD=$GOOGLE_MAIL_APP_PASSWORD"
-          echo "CLIENT_SIDE_URL=$CLIENT_SIDE_URL"
-          echo "SERVER_SIDE_URL=$SERVER_SIDE_URL"
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
