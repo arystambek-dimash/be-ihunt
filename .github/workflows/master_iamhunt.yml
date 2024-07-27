@@ -53,7 +53,7 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
-          # Remove client-secret line as it's not needed for federated credentials
+          client-secret: ${{ secrets.AZUREAPPSERVICE_PASSWORD }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
