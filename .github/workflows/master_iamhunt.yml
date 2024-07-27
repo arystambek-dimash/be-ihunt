@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip . -x .git/\* \*.md \*.yaml \*.yml
+        run: zip -r release.zip dist package.json package-lock.json
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
