@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy Node.js app to Azure Web App - iamhunt
 
 on:
@@ -18,25 +21,10 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: node-app
-          path: release.zip
-
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: node-app
-
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
+      - name: Install dependencies and start server
+        run: |
+          npm install
+          npm run server
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -44,11 +32,10 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          client-secret: ${{ secrets.AZUREAPPSERVICE_PASSWORD }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
         with:
-          app-name: 'ihunt'
+          app-name: 'iamhunt'
           slot-name: 'Production'
-          package: .
