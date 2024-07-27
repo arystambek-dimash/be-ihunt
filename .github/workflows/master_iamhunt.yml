@@ -21,8 +21,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build the project
+        run: npm run build
+
       - name: Zip artifact for deployment
-        run: zip -r release.zip .
+        run: zip -r release.zip . -x .git/\* \*.md \*.yaml \*.yml
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -53,6 +56,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'ihunt'
-          resource-group: 'iamhunt'
           slot-name: 'production'
-          package: .
+          package: '.'
