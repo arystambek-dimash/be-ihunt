@@ -53,7 +53,7 @@ jobs:
           echo "GOOGLE_MAIL_APP_PASSWORD=${{ secrets.GOOGLE_MAIL_APP_PASSWORD }}" >> $GITHUB_ENV
           echo "CLIENT_SIDE_URL=${{ secrets.CLIENT_SIDE_URL }}" >> $GITHUB_ENV
           echo "SERVER_SIDE_URL=${{ secrets.SERVER_SIDE_URL }}" >> $GITHUB_ENV
-          echo "SERVER_SIDE_URL=${{ secrets.CORS_ORIGINS }}" >> $GITHUB_ENV
+          echo "CORS_ORIGINS=${{ secrets.CORS_ORIGINS }}" >> $GITHUB_ENV
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -85,7 +85,7 @@ jobs:
           az webapp config appsettings set --resource-group iamhunt --name ihunt --settings GOOGLE_MAIL_APP_PASSWORD=${{ secrets.GOOGLE_MAIL_APP_PASSWORD }}
           az webapp config appsettings set --resource-group iamhunt --name ihunt --settings CLIENT_SIDE_URL=${{ secrets.CLIENT_SIDE_URL }}
           az webapp config appsettings set --resource-group iamhunt --name ihunt --settings SERVER_SIDE_URL=${{ secrets.SERVER_SIDE_URL }}
-          az webapp config appsettings set --resource-group iamhunt --name ihunt --settings SERVER_SIDE_URL=${{ secrets.CORS_ORIGINS }}
+          az webapp config appsettings set --resource-group iamhunt --name ihunt --settings CORS_ORIGINS=${{ secrets.CORS_ORIGINS }}
 
       - name: Restart Azure Web App
         run: az webapp restart --resource-group iamhunt --name ihunt
