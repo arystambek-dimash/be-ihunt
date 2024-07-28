@@ -19,7 +19,13 @@ const app = express();
 connectDB();
 
 app.use(json());
-app.use(cors());
+
+app.use(cors({
+    origin: process.env.CORS_ORIGINS.split(','),
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 
 app.use(session({
     secret: 'your_secret_key',
