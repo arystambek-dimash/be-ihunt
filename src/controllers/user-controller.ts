@@ -52,7 +52,7 @@ const registerHr = async (req: Request, res: Response, next: NextFunction) => {
         const emailVerificationMessage = `
             <h1>Welcome to Our Platform, ${firstName}!</h1>
             <p>Thank you for registering. Please verify your email address by clicking the link below:</p>
-            <a href="${conf.clientSideUrl}/api/v1/users/verify-email?token=${token}">Verify Email</a>
+            <a href="${conf.serverSideUrl}/api/v1/users/verify-email?token=${token}">Verify Email</a>
             <p>If you did not request this registration, please ignore this email.</p>
             <br>
             <p>Best regards,</p>
@@ -126,7 +126,7 @@ const registerAutoResponse = async (req: Request, res: Response, next: NextFunct
         const emailVerificationMessage = `
             <h1>Welcome to Our Platform!</h1>
             <p>Thank you for registering. Please verify your email address by clicking the link below:</p>
-            <a href="${conf.clientSideUrl}/api/v1/users/verify-email?token=${token}">Verify Email</a>
+            <a href="${conf.serverSideUrl}/api/v1/users/verify-email?token=${token}">Verify Email</a>
             <p>If you did not request this registration, please ignore this email.</p>
             <br>
             <p>Best regards,</p>
@@ -184,7 +184,7 @@ const verifyEmail = async (req: Request, res: Response) => {
         }
 
         if (user.isVerified) {
-            return res.status(200).json({message: "Email already verified"});
+            res.redirect(`${conf.clientSideUrl}`)
         }
 
         user.isVerified = true;
