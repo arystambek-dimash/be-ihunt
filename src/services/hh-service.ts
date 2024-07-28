@@ -49,9 +49,24 @@ class HHService {
 
             return response.data;
         } catch (err) {
-            throw err;
+            if (axios.isAxiosError(err)) {
+                if (err.response) {
+                    console.error('Error response data:', err.response.data);
+                    console.error('Error response status:', err.response.status);
+                    console.error('Error response headers:', err.response.headers);
+                } else if (err.request) {
+                    console.error('Error request:', err.request);
+                } else {
+                    console.error('Error message:', err.message);
+                }
+            } else {
+                console.error('Unexpected error:', err);
+            }
+
+            return {success: false, message: 'An error occurred, but the operation has continued.'};
         }
-    }
+    };
+
     getVacancy = async (vacancyName: any, paramsObj: any) => {
         try {
             const URL = 'https://api.hh.ru/vacancies';
@@ -117,7 +132,7 @@ class HHService {
                 Resume ID: ${resume.id}
                 Resume data: ${resume.data}
             `).join('\n')}
-            
+       
             Vacancy:
             ${vacancyDetails}
             
@@ -133,7 +148,6 @@ class HHService {
             });
 
             const jsonResponse = completion.choices[0].message.content as string;
-            console.log(jsonResponse);
 
             const regex = /"resumeId": "([^"]+)"/;
             const match = jsonResponse.match(regex);
@@ -187,9 +201,9 @@ class HHService {
     }
 }
 
-
+//
 // (async () => {
 //     const hhService = new HHService();
-//     await hhService.getOneResume('31f5fff1ff0d50966c0039ed1f306c656d7674', 'USERTVG211KSON76B75JMCBL3M0RCNP0TKJKI0NMTKK5EE5ISJCTBKOLDTS329L6')
+//     await hhService.sendNegotiation('103970896', '31f5fff1ff0d50966c0039ed1f306c656d7674', 'Heelo', 'USERTVG211KSON76B75JMCBL3M0RCNP0TKJKI0NMTKK5EE5ISJCTBKOLDTS329L6')
 // })();
 export default HHService;

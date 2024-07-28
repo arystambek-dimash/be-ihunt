@@ -10,7 +10,7 @@ import MongoStore from 'connect-mongo';
 
 import './services/linkedin-service'
 import session from "express-session";
-import {morningJob} from "./jobs/auto-apply";
+import {job1, job2, job3, job4} from "./jobs/auto-apply";
 
 dotenv.config();
 
@@ -43,7 +43,10 @@ app.get('/', (req, res) => {
 });
 
 
-morningJob.start()
+job1.start()
+job2.start()
+job3.start()
+job4.start()
 
 const PORT = conf.port || 8000;
 

@@ -62,7 +62,7 @@ export const updatePositionStatus = async (req: Request, res: Response) => {
 export const getResponses = async (req: Request, res: Response) => {
     try {
         const userId = (req as any).user._id;
-        const {page = 1, limit = 10} : any = req.query;
+        const {page = 1, limit = 10}: any = req.query;
 
         const vacancies = await Vacancy.find({user: userId})
             .skip((page - 1) * limit)
