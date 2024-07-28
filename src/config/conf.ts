@@ -5,7 +5,7 @@ dotenv.config()
 
 export default {
     port: process.env.PORT,
-    corsOrigins: process.env.CORS_ORIGINS,
+    corsOrigins: process.env.CORS_ORIGINS!,
     mongoUri: process.env.MONGO_DB_URI,
     mongodb: process.env.MONGO_DATABASE,
 
