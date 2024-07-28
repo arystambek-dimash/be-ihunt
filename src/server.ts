@@ -21,7 +21,7 @@ connectDB();
 app.use(json());
 
 app.use(cors({
-    origin: process.env.CORS_ORIGINS.split(','),
+    origin: process.env.CORS_ORIGINS.split(',') || conf.corsOrigins.split(',') || 'https://iamhunt.vercel.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
