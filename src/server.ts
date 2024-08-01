@@ -10,7 +10,6 @@ import MongoStore from 'connect-mongo';
 
 import './services/linkedin-service'
 import session from "express-session";
-import {job1, job2, job3, job4} from "./jobs/auto-apply";
 
 dotenv.config();
 
@@ -21,14 +20,14 @@ connectDB();
 app.use(json());
 
 app.use(cors({
-    origin: process.env.CORS_ORIGINS.split(',') || conf.corsOrigins.split(',') || 'https://iamhunt.vercel.app',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: process.env.CORS_ORIGINS?.split(',') || conf.corsOrigins?.split(',') || 'https://iamhunt.vercel.app',
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 
 app.use(session({
-    secret: 'your_secret_key',
+    secret: 'session_secret',
     resave: false,
     saveUninitialized: false,
     cookie: {secure: false, maxAge: 60 * 60 * 1000},
@@ -47,12 +46,6 @@ app.use('/api/v1', globalRoutes);
 app.get('/', (req, res) => {
     res.json('Hello World!');
 });
-
-
-job1.start()
-job2.start()
-job3.start()
-job4.start()
 
 const PORT = conf.port || 8000;
 

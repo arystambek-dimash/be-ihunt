@@ -117,28 +117,34 @@ const registerAutoResponse = async (req: Request, res: Response, next: NextFunct
             password: hashedPassword,
             profileImage: profileImageUrl,
             firstName,
-            lastName
+            lastName,
+            isVerified: true
         });
 
-        const tokenResponse: any = await jwtService.generateToken({id: user.id, email: email, isHr: false}, "7d", true);
-        const token = tokenResponse.token;
+        // const tokenResponse: any = await jwtService.generateToken({id: user.id, email: email, isHr: false}, "7d", true);
+        // const token = tokenResponse.token;
+        //
+        // const emailVerificationMessage = `
+        //     <h1>Welcome to Our Platform!</h1>
+        //     <p>Thank you for registering. Please verify your email address by clicking the link below:</p>
+        //     <a href="${conf.serverSideUrl}/api/v1/users/verify-email?token=${token}">Verify Email</a>
+        //     <p>If you did not request this registration, please ignore this email.</p>
+        //     <br>
+        //     <p>Best regards,</p>
+        //     <p>Your Company Team</p>
+        // `;
+        // await mailService.sendMail(email, "Email Verification", emailVerificationMessage);
 
-        const emailVerificationMessage = `
-            <h1>Welcome to Our Platform!</h1>
-            <p>Thank you for registering. Please verify your email address by clicking the link below:</p>
-            <a href="${conf.serverSideUrl}/api/v1/users/verify-email?token=${token}">Verify Email</a>
-            <p>If you did not request this registration, please ignore this email.</p>
-            <br>
-            <p>Best regards,</p>
-            <p>Your Company Team</p>
-        `;
-        await mailService.sendMail(email, "Email Verification", emailVerificationMessage);
-        res.status(200).json({message: "Registration successful! Please check your email to verify your account."});
+
+        const tokens: any = await jwtService.generateToken({id: user.id, email: email, isHr: false});
+        res.status(200).json({message: 'Login successful', tokens});
     } catch (err) {
         console.log(err);
         res.status(500).json({message: "Something went wrong"});
     }
 };
+
+
 const loginAutoResponse = async (req: Request, res: Response) => {
     const {email, password} = req.body;
     try {
