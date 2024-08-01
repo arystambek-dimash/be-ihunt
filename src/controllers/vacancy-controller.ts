@@ -65,6 +65,7 @@ export const getResponses = async (req: Request, res: Response) => {
         const {page = 1, limit = 10}: any = req.query;
 
         const vacancies = await Vacancy.find({user: userId})
+            .sort({_id: -1})
             .skip((page - 1) * limit)
             .limit(Number(limit));
 
