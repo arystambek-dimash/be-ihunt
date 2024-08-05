@@ -16,4 +16,11 @@ async function loadPDF(url: string, token?: string) {
     return pdfData.map(page => JSON.stringify(page)).join(' ');
 }
 
+export function removeMarkdown(text: string) {
+    text = text.replace(/```json\n/g, '');
+    text = text.replace(/```/g, '');
+    return text.trim();
+}
+
+
 export default loadPDF
