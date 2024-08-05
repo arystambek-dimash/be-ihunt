@@ -199,6 +199,26 @@ class HHService {
             'HH-User-Agent': 'Recruiter AI/1.0 (arystambekdimash005@gmail.com)'
         };
     }
+
+    getVacancyById = async (vacancyId: string) => {
+        const vacancyURL = `https://api.hh.ru/vacancies/${vacancyId}`;
+        try {
+            const vacancyResponse = await axios.get(vacancyURL);
+
+            const vacancy = vacancyResponse.data;
+
+            return {
+                url: 'https://hh.ru/vacancy/' + vacancy.id,
+                job_name: vacancy.name,
+                job_description: vacancy.description,
+                job_salary: {from: vacancy?.salary?.from, to: vacancy?.salary?.to},
+                job_employer_name: vacancy.employer.name,
+                employer_logo: vacancy.employer.logo_urls ? vacancy.employer.logo_urls['90'] : 'https://media.licdn.com/dms/image/C4D0BAQGYJfURzon1xg/company-logo_200_200/0/1631327285447?e=2147483647&v=beta&t=mTBfWh3AsArQHLJLo8fp6OLk5LLlzqQrsL6ob3uUFsA',
+            }
+        } catch (err) {
+            return
+        }
+    };
 }
 
 //
