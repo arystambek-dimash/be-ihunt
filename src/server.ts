@@ -6,7 +6,6 @@ import conf from './config/conf';
 import globalRoutes from './globalRoutes';
 import connectDB from './config/db';
 import passport from "passport";
-import MongoStore from 'connect-mongo';
 
 import './services/linkedin-service'
 import session from "express-session";
@@ -30,11 +29,7 @@ app.use(session({
     secret: 'session_secret',
     resave: false,
     saveUninitialized: false,
-    cookie: {secure: false, maxAge: 60 * 60 * 1000},
-    store: MongoStore.create({
-        mongoUrl: conf.mongoUri,
-        collectionName: 'sessions'
-    })
+    cookie: {secure: false, maxAge: 60 * 60 * 1000}
 }));
 
 
